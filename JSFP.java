@@ -162,9 +162,14 @@ public class JSFP
       if(player[i].getCost(cost, other, 0) < player[i].getCost(cost, other, 1))
       {
         player[i].setFirstStrategy(player[i].getCorrespond(0, other));
+	player[i].setPreStrategy(0);
       }else{
         player[i].setFirstStrategy(player[i].getCorrespond(1, other));
+	player[i].setPreStrategy(1);
       }
+
+      player[i].setAvgCost0(player[i].getCost(cost, other, 0));
+      player[i].setAvgCost1(player[i].getCost(cost, other, 1));
     }
     
   }
@@ -191,6 +196,18 @@ public class JSFP
     return -1;
   }
 
+  public void computeAvgCost(Player i, double stage, int other)
+  {
+    double cost0 = (stage-1.0)/stage * i.getAvgCost0() + 
+             1.0/stage * i.getCost(cost, other, 0);
+    double cost1 = (stage-1.0)/stage * i.getAvgCost1() + 
+             1.0/stage * i.getCost(cost, other, 1);
+
+    i.setAvgCost0(cost0);
+    i.setAvgCost1(cost1);
+
+  }
+ 
   public static void main(String [ ] args)
   {
     JSFP simul = new JSFP();
@@ -202,42 +219,57 @@ public class JSFP
     simul.setCost();
     simul.printCost();
 
+    int stage = 0;
+
     for(int i = 0; i < 4; i++){
       player[i] = new Player(strategy, i);
     }
     simul.initialize(player);
 
-    for(int i = 0; i < 4; i++){
-      int j = player[i].getFirstStrategy();
-      player[i].setAvgCost(cost[i][j]);
-      player[i].setLastCost(cost[i][j]); 
-    }
-
-    int a = strategy[0][player[0].getFirstStrategy()];
-    int b = strategy[1][player[1].getFirstStrategy()];
-    int c = strategy[2][player[2].getFirstStrategy()];
-    int d = strategy[3][player[3].getFirstStrategy()];
-    System.out.println("a: " + a);
-    System.out.println("b: " + b);
-    System.out.println("c: " + c);
-    System.out.println("d: " + d);
-
-    player[0].setPreStrategy(a);
-    player[1].setPreStrategy(b);
-    player[2].setPreStrategy(c);
-    player[3].setPreStrategy(d);
-
-    int preStrategy = simul.findStrategy(a,b,c,d);
-
-    System.out.println("Pre-strategy = " + preStrategy);
-    
     int l = LIMIT;
-    while(l){
+    int m = LIMIT;
+    while(m!= 0){  
+      stage++;
+      
       for(int i = 0; i < 4; i++){
-        if(player[i].getPreStrategy() == 0)
+        System.out.println(player[i].getPreStrategy());
       }
 
-      l--;
+      int a = player[0].getPreStrategy();
+      int b = player[1].getPreStrategy();
+      int c = player[2].getPreStrategy();
+      int d = player[3].getPreStrategy();
+
+      int preStrategy = simul.findStrategy(a,b,c,d);
+      System.out.println("Pre-strategy = " + preStrategy);
+
+      for(int i = 0; i < 4; i++){
+	int other = player[i].getCorresReverse(preStrategy);
+
+	//compute average cost using strategy 0 and 1
+        simul.computeAvgCost(player[i], stage, other);	
+
+        if(player[i].getAvgCost0() < player[i].getAvgCost1()){
+	  if(player[i].getPreStrategy() == 0){
+	    l--;
+	  }else{
+	    l = LIMIT;
+	  }
+
+	  player[i].setPreStrategy(0);
+	}else{
+	  if(player[i].getPreStrategy() == 1){
+	    l--;
+	  }else{
+	    l = LIMIT;
+	  }
+
+	  player[i].setPreStrategy(1);
+	}
+
+      }
+
+      m--;
     }
 
   }

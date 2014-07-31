@@ -27,8 +27,8 @@ public class Player
   private int preStrategy;
   private int firstStrategy;
 
-  private int avgCost;
-  private int lastCost;
+  private double avgCost0 = 0;
+  private double avgCost1 = 0; 
 
   public Player(int[][] strategy, int num)
   {
@@ -79,6 +79,20 @@ public class Player
     }else{
       return correspond1[other];
     }
+  }
+
+  public int getCorresReverse(int strat)
+  {
+    for(int i = 0; i < 8; i++){
+      if(correspond0[i] == strat){
+        return i;
+      }
+      if(correspond1[i] == strat){
+        return i;
+      }
+    }
+
+    return -1;
   }
 
   public int getCost(int[][] cost, int other, int strat)
@@ -135,23 +149,24 @@ public class Player
     return preStrategy;
   }
 
-  public void setAvgCost(int x)
+  public void setAvgCost0(double x)
   {
-    avgCost = x;
+    avgCost0 = x;
   }
 
-  public int getAvgCost()
+  public double getAvgCost0()
   {
-    return avgCost;
+    return avgCost0;
   }
 
-  public void setLastCost(int x)
+  public void setAvgCost1(double x)
   {
-    lastCost = x;
+    avgCost1 = x; 
   }
 
-  public int getLastCost();
+  public double getAvgCost1()
   {
-    return lastCost;
+    return avgCost1;
   }
-}
+
+ }
