@@ -1,6 +1,17 @@
 import java.lang.System.*;
 import java.util.*;
 
+/*
+ * Method Summary:
+ * public void setStrategy()
+ * public void printStrategy()
+ * public void setCost()
+ * public void printCost()
+ * public void initialize(Player[] player)
+ * public int findStrategy(int a, int b, int c, int d)
+ * public void computeAvgCost(Player i, double stage, int other)
+ */
+
 public class JSFP
 {
   private static int[][] strategy = new int[4][16];

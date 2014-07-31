@@ -4,17 +4,19 @@ import java.lang.System.*;
 /*
  * Method summary:
  * public void printCorrespond()
+ * public int getCorresReverse(int strat)
  * public int getCost(int[][] cost, int other, int strat)
  * public void printPlayer()
  * public void setFirstStrategy(int x)
  * public int getFirstStrategy()
  * public void setPreStrategy(int x)
  * public int getPreStrategy()
- * public void setAvgCost(int x)
- * public int getAvgCost()
- * public void setLastCost(int x)
- * public int getLastCost()
+ * public void setAvgCost0(double x)
+ * public double getAvgCost0()
+ * public void setAvgCost1(double x)
+ * public double getAvgCost()
  */
+
 public class Player
 {
   private int num;
