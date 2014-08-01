@@ -237,6 +237,7 @@ public class JSFP
     simul.printCost();
 
     int stage = 0;
+    int preStrategy = -1;
 
     for(int i = 0; i < 4; i++){
       player[i] = new Player(strategy, i);
@@ -244,8 +245,7 @@ public class JSFP
     simul.initialize(player);
 
     int l = LIMIT;
-    int m = LIMIT;
-    while(m!= 0){  
+    while(l!= 0){  
       stage++;
       
       for(int i = 0; i < 4; i++){
@@ -257,7 +257,11 @@ public class JSFP
       int c = player[2].getPreStrategy();
       int d = player[3].getPreStrategy();
 
-      int preStrategy = simul.findStrategy(a,b,c,d);
+      if(preStrategy == simul.findStrategy(a,b,c,d)){
+        l--;
+      }else{
+        preStrategy = simul.findStrategy(a,b,c,d);
+      }
       System.out.println("Pre-strategy = " + preStrategy);
 
       for(int i = 0; i < 4; i++){
@@ -267,26 +271,12 @@ public class JSFP
         simul.computeAvgCost(player[i], stage, other);	
 
         if(player[i].getAvgCost0() < player[i].getAvgCost1()){
-	  if(player[i].getPreStrategy() == 0){
-	    l--;
-	  }else{
-	    l = LIMIT;
-	  }
-
 	  player[i].setPreStrategy(0);
 	}else{
-	  if(player[i].getPreStrategy() == 1){
-	    l--;
-	  }else{
-	    l = LIMIT;
-	  }
-
 	  player[i].setPreStrategy(1);
 	}
 
       }
-
-      m--;
     }
 
   }
