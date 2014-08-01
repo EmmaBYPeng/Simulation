@@ -18,7 +18,8 @@ public class JSFP
   private static int[][] cost = new int[4][16];
 
   private Random random = new Random();
-  private static int LIMIT = 10;
+  private int randomStrat = -1;
+  private static int LIMIT = 4;
 
   public void setStrategy()
   {
@@ -164,23 +165,28 @@ public class JSFP
 
   public void initialize(Player[] player)
   {
-    int other = random.nextInt(7);
+    int temp = random.nextInt(7);
+    while(randomStrat == temp){
+      temp = random.nextInt(7);
+    }
+    randomStrat = temp;
 
     for(int i = 0; i < 4; i++){
       player[i].printPlayer();
       player[i].printCorrespond();
 
-      if(player[i].getCost(cost, other, 0) < player[i].getCost(cost, other, 1))
+      if(player[i].getCost(cost, randomStrat, 0) < 
+	 player[i].getCost(cost, randomStrat, 1))
       {
-        player[i].setFirstStrategy(player[i].getCorrespond(0, other));
+        player[i].setFirstStrategy(player[i].getCorrespond(0, randomStrat));
 	player[i].setPreStrategy(0);
       }else{
-        player[i].setFirstStrategy(player[i].getCorrespond(1, other));
+        player[i].setFirstStrategy(player[i].getCorrespond(1, randomStrat));
 	player[i].setPreStrategy(1);
       }
 
-      player[i].setAvgCost0(player[i].getCost(cost, other, 0));
-      player[i].setAvgCost1(player[i].getCost(cost, other, 1));
+      player[i].setAvgCost0(player[i].getCost(cost, randomStrat, 0));
+      player[i].setAvgCost1(player[i].getCost(cost, randomStrat, 1));
     }
     
   }
